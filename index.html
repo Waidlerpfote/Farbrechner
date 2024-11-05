@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maine Coon Farb-Rechner</title>
+    <link rel="manifest" href="manifest.json">
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js').then(function(registration) {
+          console.log('Service Worker registriert mit Scope:', registration.scope);
+        }).catch(function(error) {
+          console.log('Service Worker Registrierung fehlgeschlagen:', error);
+        });
+      }
+    </script>
+</head>
+<body>
+    <h1>Willkommen zum Maine Coon Farb-Rechner!</h1>
+    <p>Hier wird der Farb-Rechner angezeigt.</p>
+</body>
+</html>
