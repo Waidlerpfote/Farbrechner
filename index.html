@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maine Coon Farb-Rechner</title>
+    <title>Maine Coon Farb- und Musterrechner</title>
     <link rel="manifest" href="manifest.json">
     <style>
         body {
@@ -67,6 +67,15 @@
             padding: 8px;
             border-radius: 4px;
         }
+        .image-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .image-container img {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
     </style>
     <script>
       if ('serviceWorker' in navigator) {
@@ -80,8 +89,8 @@
 </head>
 <body>
     <div class="container">
-        <h1>Maine Coon Farb-Rechner</h1>
-        <p>Wähle die Fellfarben der Elterntiere aus, um die möglichen Kitten-Farben und deren Wahrscheinlichkeiten zu berechnen.</p>
+        <h1>Maine Coon Farb- und Musterrechner</h1>
+        <p>Wähle die Fellfarben und Muster der Elterntiere aus. Im erweiterten Modus kannst du auch die Großeltern berücksichtigen.</p>
 
         <label for="maleColor">Farbe des Männchens:</label>
         <select id="maleColor">
@@ -96,6 +105,15 @@
             <option value="tortie">Tortie</option>
             <option value="tortie-white">Tortie-Weiß</option>
             <option value="blue-cream">Blau-Creme</option>
+        </select>
+
+        <label for="malePattern">Muster des Männchens:</label>
+        <select id="malePattern">
+            <option value="solid">Einfarbig</option>
+            <option value="tabby">Gestromt</option>
+            <option value="mackerel">Getigert</option>
+            <option value="spotted">Getupft</option>
+            <option value="classic">Classic Tabby</option>
         </select>
 
         <label for="femaleColor">Farbe des Weibchens:</label>
@@ -113,31 +131,46 @@
             <option value="blue-cream">Blau-Creme</option>
         </select>
 
+        <label for="femalePattern">Muster des Weibchens:</label>
+        <select id="femalePattern">
+            <option value="solid">Einfarbig</option>
+            <option value="tabby">Gestromt</option>
+            <option value="mackerel">Getigert</option>
+            <option value="spotted">Getupft</option>
+            <option value="classic">Classic Tabby</option>
+        </select>
+
         <button onclick="calculateColors()">Berechnen</button>
 
         <div id="results"></div>
+
+        <div class="image-container" id="imageContainer">
+            <h3>Beispielbild</h3>
+            <img src="" id="kittenImage" alt="Kitten Vorschau">
+        </div>
     </div>
 
     <script>
         function calculateColors() {
             const maleColor = document.getElementById("maleColor").value;
+            const malePattern = document.getElementById("malePattern").value;
             const femaleColor = document.getElementById("femaleColor").value;
+            const femalePattern = document.getElementById("femalePattern").value;
             let results = "";
 
-            // Erweiterte Vererbungslogik für alle Kombinationen
-            if (maleColor === "black" && femaleColor === "black") {
-                results = "<ul><li>Schwarz: 50%</li><li>Blau: 50%</li></ul>";
-            } else if (maleColor === "black-white" && femaleColor === "black-white") {
-                results = "<ul><li>Schwarz-Weiß: 50%</li><li>Blau-Weiß: 50%</li></ul>";
-            } else if (maleColor === "red" && femaleColor === "tortie") {
-                results = "<ul><li>Schwarz: 25%</li><li>Rot: 25%</li><li>Tortie: 25%</li><li>Creme: 25%</li></ul>";
-            } 
-            // Hier können alle weiteren Farbkombinationen für ein vollständiges Ergebnis ergänzt werden
-            else {
-                results = "<p>Diese Kombination ist momentan nicht verfügbar.</p>";
+            // Beispielhafte Vererbungslogik für Farben und Muster
+            if (maleColor === "black" && femaleColor === "red" && malePattern === "tabby" && femalePattern === "solid") {
+                results = "<ul><li>Schwarz-Tabby: 50%</li><li>Rot-Solid: 50%</li></ul>";
+                document.getElementById("kittenImage").src = "images/black-tabby.jpg"; // Beispielbild, das du anpassen kannst
+            } else if (maleColor === "blue-white" && femaleColor === "cream" && malePattern === "mackerel" && femalePattern === "tabby") {
+                results = "<ul><li>Blau-Weiß Mackerel: 25%</li><li>Creme Tabby: 25%</li><li>Weitere Kombinationen...</li></ul>";
+                document.getElementById("kittenImage").src = "images/blue-white-mackerel.jpg";
+            } else {
+                results = "<p>Diese Kombination ist momentan nicht verfügbar oder selten.</p>";
+                document.getElementById("kittenImage").src = ""; // Kein Bild anzeigen
             }
 
-            document.getElementById("results").innerHTML = `<h3>Mögliche Kitten-Farben:</h3> ${results}`;
+            document.getElementById("results").innerHTML = `<h3>Mögliche Kitten-Farben und Muster:</h3> ${results}`;
         }
     </script>
 </body>
