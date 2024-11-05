@@ -15,8 +15,81 @@
       }
     </script>
 </head>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maine Coon Farb-Rechner</title>
+    <link rel="manifest" href="manifest.json">
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js').then(function(registration) {
+          console.log('Service Worker registriert mit Scope:', registration.scope);
+        }).catch(function(error) {
+          console.log('Service Worker Registrierung fehlgeschlagen:', error);
+        });
+      }
+    </script>
+</head>
 <body>
-    <h1>Willkommen zum Maine Coon Farb-Rechner!</h1>
-    <p>Hier wird der Farb-Rechner angezeigt.</p>
+    <h1>Maine Coon Farb-Rechner</h1>
+    <p>Wähle die Fellfarben der Elterntiere aus, um die möglichen Kitten-Farben und deren Wahrscheinlichkeiten zu berechnen.</p>
+
+    <label for="maleColor">Farbe des Männchens:</label>
+    <select id="maleColor">
+        <option value="black">Schwarz</option>
+        <option value="blue">Blau</option>
+        <option value="red">Rot</option>
+        <option value="cream">Creme</option>
+        <option value="tortie">Tortie (männlich selten)</option>
+    </select>
+
+    <label for="femaleColor">Farbe des Weibchens:</label>
+    <select id="femaleColor">
+        <option value="black">Schwarz</option>
+        <option value="blue">Blau</option>
+        <option value="red">Rot</option>
+        <option value="cream">Creme</option>
+        <option value="tortie">Tortie</option>
+    </select>
+
+    <button onclick="calculateColors()">Berechnen</button>
+
+    <div id="results"></div>
+
+    <script>
+        function calculateColors() {
+            const maleColor = document.getElementById("maleColor").value;
+            const femaleColor = document.getElementById("femaleColor").value;
+            let results = "";
+
+            // Farbvererbungslogik für einige Kombinationen
+            if (maleColor === "black" && femaleColor === "black") {
+                results = "<ul><li>Schwarz: 50%</li><li>Blau: 50%</li></ul>";
+            } else if ((maleColor === "black" && femaleColor === "blue") || (maleColor === "blue" && femaleColor === "black")) {
+                results = "<ul><li>Schwarz: 50%</li><li>Blau: 50%</li></ul>";
+            } else if (maleColor === "black" && femaleColor === "red") {
+                results = "<ul><li>Schwarz: 25%</li><li>Rot: 25%</li><li>Tortie: 25%</li><li>Creme: 25%</li></ul>";
+            } else if (maleColor === "red" && femaleColor === "black") {
+                results = "<ul><li>Schwarz: 25%</li><li>Rot: 25%</li><li>Tortie: 25%</li><li>Creme: 25%</li></ul>";
+            } else if (maleColor === "red" && femaleColor === "red") {
+                results = "<ul><li>Rot: 50%</li><li>Creme: 50%</li></ul>";
+            } else if (maleColor === "blue" && femaleColor === "blue") {
+                results = "<ul><li>Blau: 50%</li><li>Creme: 50%</li></ul>";
+            } else if ((maleColor === "red" && femaleColor === "cream") || (maleColor === "cream" && femaleColor === "red")) {
+                results = "<ul><li>Rot: 25%</li><li>Creme: 25%</li><li>Tortie: 25%</li><li>Blau: 25%</li></ul>";
+            } else if (maleColor === "tortie" && femaleColor === "black") {
+                results = "<ul><li>Schwarz: 25%</li><li>Blau: 25%</li><li>Tortie: 25%</li><li>Creme: 25%</li></ul>";
+            } else if (maleColor === "tortie" && femaleColor === "tortie") {
+                results = "<ul><li>Schwarz: 25%</li><li>Blau: 25%</li><li>Tortie: 25%</li><li>Creme: 25%</li></ul>";
+            } else {
+                results = "<p>Diese Kombination ist momentan nicht verfügbar.</p>";
+            }
+
+            document.getElementById("results").innerHTML = `<h3>Mögliche Kitten-Farben:</h3> ${results}`;
+        }
+    </script>
 </body>
 </html>
+
