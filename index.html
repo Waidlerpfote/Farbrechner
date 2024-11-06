@@ -14,164 +14,147 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
+            text-align: center;
         }
         .container {
             background: #ffffff;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            max-width: 500px;
+            max-width: 600px;
             width: 100%;
         }
         h1 {
             font-size: 24px;
             color: #333;
-            text-align: center;
         }
-        label {
+        #start-screen {
             display: block;
-            font-weight: bold;
-            margin-top: 10px;
-            color: #555;
         }
-        select, button {
+        #calculator {
+            display: none;
+        }
+        #results, .image-container {
+            margin-top: 20px;
+        }
+        label, select, button, input[type="checkbox"] {
+            display: block;
             width: 100%;
-            padding: 10px;
             margin-top: 5px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
             font-size: 16px;
         }
         button {
             background-color: #007bff;
             color: white;
             cursor: pointer;
-            font-weight: bold;
-            transition: background-color 0.3s;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        #results {
-            margin-top: 20px;
-            font-size: 16px;
-            color: #333;
-        }
-        #results ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        #results li {
-            background-color: #e9ecef;
-            margin: 5px 0;
-            padding: 8px;
+            padding: 10px;
+            border: none;
             border-radius: 4px;
-        }
-        .image-container {
-            text-align: center;
-            margin-top: 20px;
         }
         .image-container img {
             max-width: 100%;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
+        .grandparent-options {
+            display: none;
+            margin-top: 15px;
+        }
     </style>
     <script>
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js').then(function(registration) {
-          console.log('Service Worker registriert mit Scope:', registration.scope);
-        }).catch(function(error) {
-          console.log('Service Worker Registrierung fehlgeschlagen:', error);
-        });
-      }
+        function showCalculator() {
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('calculator').style.display = 'block';
+        }
+
+        function toggleGrandparents() {
+            const checkbox = document.getElementById('toggle-grandparents');
+            const grandparentOptions = document.querySelector('.grandparent-options');
+            grandparentOptions.style.display = checkbox.checked ? 'block' : 'none';
+        }
+
+        function displayExampleImage() {
+            const maleColor = document.getElementById("maleColor").value;
+            const malePattern = document.getElementById("malePattern").value;
+            const exampleImage = document.getElementById("exampleImage");
+
+            exampleImage.src = `images/${maleColor}-${malePattern}.jpg`; // Bildpfad anpassen
+            exampleImage.alt = `${maleColor} ${malePattern}`;
+        }
+
+        function calculateColors() {
+            const maleColor = document.getElementById("maleColor").value;
+            const femaleColor = document.getElementById("femaleColor").value;
+            const results = "<p>Beispielhafte genetische Ergebnisse basierend auf Literaturdaten...</p>";
+            document.getElementById("results").innerHTML = results;
+        }
     </script>
 </head>
 <body>
-    <div class="container">
+
+    <!-- Startbildschirm -->
+    <div id="start-screen" class="container">
+        <img src="images/logo.png" alt="Waidlerpfote Logo" style="width: 100px; margin-bottom: 20px;">
+        <h1>Willkommen bei Waidlerpfote</h1>
+        <p>Hier kannst du die mögliche Farb- und Mustervererbung deiner Maine Coon Kitten berechnen.</p>
+        <button onclick="showCalculator()">Zum Rechner</button>
+    </div>
+
+    <!-- Farb- und Musterrechner -->
+    <div id="calculator" class="container">
         <h1>Maine Coon Farb- und Musterrechner</h1>
-        <p>Wähle die Fellfarben und Muster der Elterntiere aus. Im erweiterten Modus kannst du auch die Großeltern berücksichtigen.</p>
 
-        <label for="maleColor">Farbe des Männchens:</label>
-        <select id="maleColor">
-            <option value="black">Schwarz</option>
-            <option value="black-white">Schwarz-Weiß</option>
-            <option value="blue">Blau</option>
-            <option value="blue-white">Blau-Weiß</option>
-            <option value="red">Rot</option>
-            <option value="red-white">Rot-Weiß</option>
-            <option value="cream">Creme</option>
-            <option value="cream-white">Creme-Weiß</option>
-            <option value="tortie">Tortie</option>
-            <option value="tortie-white">Tortie-Weiß</option>
-            <option value="blue-cream">Blau-Creme</option>
+        <label for="maleColor">Farbe des Männchens (Schwarz [Black]):</label>
+        <select id="maleColor" onchange="displayExampleImage()">
+            <option value="black">Schwarz (Black)</option>
+            <option value="black-white">Schwarz-Weiß (Black-White)</option>
+            <!-- Weitere Farben hinzufügen... -->
         </select>
 
-        <label for="malePattern">Muster des Männchens:</label>
-        <select id="malePattern">
-            <option value="solid">Einfarbig</option>
-            <option value="tabby">Gestromt</option>
-            <option value="mackerel">Getigert</option>
-            <option value="spotted">Getupft</option>
-            <option value="classic">Classic Tabby</option>
+        <label for="malePattern">Muster des Männchens (Gestromt [Tabby]):</label>
+        <select id="malePattern" onchange="displayExampleImage()">
+            <option value="solid">Einfarbig (Solid)</option>
+            <option value="tabby">Gestromt (Tabby)</option>
+            <!-- Weitere Muster hinzufügen... -->
         </select>
 
-        <label for="femaleColor">Farbe des Weibchens:</label>
-        <select id="femaleColor">
-            <option value="black">Schwarz</option>
-            <option value="black-white">Schwarz-Weiß</option>
-            <option value="blue">Blau</option>
-            <option value="blue-white">Blau-Weiß</option>
-            <option value="red">Rot</option>
-            <option value="red-white">Rot-Weiß</option>
-            <option value="cream">Creme</option>
-            <option value="cream-white">Creme-Weiß</option>
-            <option value="tortie">Tortie</option>
-            <option value="tortie-white">Tortie-Weiß</option>
-            <option value="blue-cream">Blau-Creme</option>
+        <label for="femaleColor">Farbe des Weibchens (Rot [Red]):</label>
+        <select id="femaleColor" onchange="displayExampleImage()">
+            <option value="red">Rot (Red)</option>
+            <option value="red-white">Rot-Weiß (Red-White)</option>
+            <!-- Weitere Farben hinzufügen... -->
         </select>
 
-        <label for="femalePattern">Muster des Weibchens:</label>
-        <select id="femalePattern">
-            <option value="solid">Einfarbig</option>
-            <option value="tabby">Gestromt</option>
-            <option value="mackerel">Getigert</option>
-            <option value="spotted">Getupft</option>
-            <option value="classic">Classic Tabby</option>
+        <label for="femalePattern">Muster des Weibchens (Getupft [Spotted]):</label>
+        <select id="femalePattern" onchange="displayExampleImage()">
+            <option value="spotted">Getupft (Spotted)</option>
+            <option value="classic">Classic Tabby (Blotched)</option>
+            <!-- Weitere Muster hinzufügen... -->
         </select>
+
+        <label>
+            <input type="checkbox" id="toggle-grandparents" onclick="toggleGrandparents()"> Großeltern einbeziehen
+        </label>
+
+        <div class="grandparent-options">
+            <label for="grandparent1Color">Farbe des Großvaters väterlicherseits:</label>
+            <select id="grandparent1Color">
+                <option value="black">Schwarz (Black)</option>
+                <!-- Weitere Farben hinzufügen... -->
+            </select>
+            <!-- Weitere Großelternoptionen einfügen -->
+        </div>
 
         <button onclick="calculateColors()">Berechnen</button>
 
-        <div id="results"></div>
+        <div id="results">
+            <!-- Ergebnisse werden hier angezeigt -->
+        </div>
 
-        <div class="image-container" id="imageContainer">
+        <div class="image-container">
             <h3>Beispielbild</h3>
-            <img src="" id="kittenImage" alt="Kitten Vorschau">
+            <img src="" id="exampleImage" alt="Kitten Vorschau">
         </div>
     </div>
-
-    <script>
-        function calculateColors() {
-            const maleColor = document.getElementById("maleColor").value;
-            const malePattern = document.getElementById("malePattern").value;
-            const femaleColor = document.getElementById("femaleColor").value;
-            const femalePattern = document.getElementById("femalePattern").value;
-            let results = "";
-
-            // Beispielhafte Vererbungslogik für Farben und Muster
-            if (maleColor === "black" && femaleColor === "red" && malePattern === "tabby" && femalePattern === "solid") {
-                results = "<ul><li>Schwarz-Tabby: 50%</li><li>Rot-Solid: 50%</li></ul>";
-                document.getElementById("kittenImage").src = "images/black-tabby.jpg"; // Beispielbild, das du anpassen kannst
-            } else if (maleColor === "blue-white" && femaleColor === "cream" && malePattern === "mackerel" && femalePattern === "tabby") {
-                results = "<ul><li>Blau-Weiß Mackerel: 25%</li><li>Creme Tabby: 25%</li><li>Weitere Kombinationen...</li></ul>";
-                document.getElementById("kittenImage").src = "images/blue-white-mackerel.jpg";
-            } else {
-                results = "<p>Diese Kombination ist momentan nicht verfügbar oder selten.</p>";
-                document.getElementById("kittenImage").src = ""; // Kein Bild anzeigen
-            }
-
-            document.getElementById("results").innerHTML = `<h3>Mögliche Kitten-Farben und Muster:</h3> ${results}`;
-        }
-    </script>
 </body>
 </html>
